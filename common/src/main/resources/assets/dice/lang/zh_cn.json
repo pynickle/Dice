@@ -1,0 +1,20 @@
+{
+  "item_group.dice.dice": "骰子",
+  "item.dice.white_d6": "白色骰子",
+  "item.dice.orange_d6": "橙色骰子",
+  "item.dice.magenta_d6": "品红色骰子",
+  "item.dice.light_blue_d6": "淡蓝色骰子",
+  "item.dice.yellow_d6": "黄色骰子",
+  "item.dice.lime_d6": "黄绿色骰子",
+  "item.dice.pink_d6": "粉色骰子",
+  "item.dice.gray_d6": "灰色骰子",
+  "item.dice.light_gray_d6": "淡灰色骰子",
+  "item.dice.cyan_d6": "青色骰子",
+  "item.dice.purple_d6": "紫色骰子",
+  "item.dice.blue_d6": "蓝色骰子",
+  "item.dice.brown_d6": "棕色骰子",
+  "item.dice.green_d6": "绿色骰子",
+  "item.dice.red_d6": "红色骰子",
+  "item.dice.black_d6": "黑色骰子",
+  "entity.dice.dice_entity": "骰子"
+}
