@@ -1,8 +1,6 @@
 package com.euphony.dice.entity;
 
 import com.euphony.dice.Dice;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,7 +12,8 @@ public class D6Model extends DiceModel {
 	private final ModelPart bb_main;
 	
 	public D6Model(ModelPart root) {
-		this.bb_main = root.getChild("bb_main");
+        super(root);
+        this.bb_main = root.getChild("bb_main");
 	}
 	
 	public static LayerDefinition createBodyLayer() {
@@ -26,20 +25,16 @@ public class D6Model extends DiceModel {
 		
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
-	
+
 	@Override
-	public void setupAnim(DiceEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {}
-	
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, int k) {
-		bb_main.render(poseStack, vertexConsumer, i, j, k);
+	public void setupAnim(DiceRenderState entityRenderState) {
 	}
 	
 	@Override
-	public void setupRotation(DiceEntity dice) {
+	public void setupRotation(DiceRenderState dice) {
 		final float r1 = (float) Math.PI / 2f;
 		
-		switch (dice.getRolled()) {
+		switch (dice.rolled) {
 			case 1:
 				setRotationAngle((float) Math.PI, 0, 0);
 				break;

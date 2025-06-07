@@ -11,7 +11,9 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
@@ -119,7 +121,12 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 	protected @NotNull MovementEmission getMovementEmission() {
 		return MovementEmission.NONE;
 	}
-	
+
+	@Override
+	public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float f) {
+		return false;
+	}
+
 	@Override
 	public boolean canBeHitByProjectile() {
 		return false;
@@ -160,11 +167,11 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 	protected void readAdditionalSaveData(CompoundTag tag) {
 		Color defaultColor = Color.WHITE;
 
-		r = tag.contains("R", 99) ? tag.getInt("R") : defaultColor.getRed();
-		g = tag.contains("G", 99) ? tag.getInt("G") : defaultColor.getGreen();
-		b = tag.contains("B", 99) ? tag.getInt("B") : defaultColor.getBlue();
-		type = tag.contains("Type", 99) ? tag.getByte("Type") : 6;
-		rolled = tag.contains("Rolled", 99) ? tag.getByte("Rolled") : (byte) (1 + random.nextInt(this.type));
+		r = tag.contains("R") ? tag.getInt("R").get() : defaultColor.getRed();
+		g = tag.contains("G") ? tag.getInt("G").get() : defaultColor.getGreen();
+		b = tag.contains("B") ? tag.getInt("B").get() : defaultColor.getBlue();
+		type = tag.contains("Type") ? tag.getByte("Type").get() : 6;
+		rolled = tag.contains("Rolled") ? tag.getByte("Rolled").get() : (byte) (1 + random.nextInt(this.type));
 	}
 
 	@Override

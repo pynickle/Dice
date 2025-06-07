@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-public class DiceEntityRenderer extends EntityRenderer<DiceEntity> {
+public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderState> {
 	private static final ResourceLocation D6_TEX = ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, "textures/entity/d6.png");
 	private static D6Model d6Model;
 	
@@ -23,41 +23,52 @@ public class DiceEntityRenderer extends EntityRenderer<DiceEntity> {
 	}
 
 	@Override
-	public void render(DiceEntity dice, float noidea, float partial, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-		DiceModel model = switch (dice.getDiceType()) {
+	public DiceRenderState createRenderState() {
+		return new DiceRenderState();
+	}
+	@Override
+	public void render(DiceRenderState diceRenderState, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+		DiceModel model = switch (diceRenderState.diceType) {
 			case 6 -> d6Model;
-			default -> throw new IllegalArgumentException("Unexpected value: " + dice.getRolled());
+			default -> throw new IllegalArgumentException("Unexpected value: " + diceRenderState.rolled);
 		};
 		
-		boolean flag = !dice.isInvisible();
-		boolean flag1 = !flag && !dice.isInvisibleTo(minecraft.player);
+		boolean flag = !diceRenderState.isInvisible;
 		
-		RenderType rendertype = getRenderType(dice, model, flag, flag1);
+		RenderType rendertype = getRenderType(diceRenderState, model, flag);
 		if (rendertype != null) {
-			model.setupRotation(dice);
-			int color = ((flag1 ? 38 : 255) << 24) | ((dice.getRed() & 255) << 16) | ((dice.getGreen() & 255) << 8) | (dice.getBlue() & 255);
+			model.setupRotation(diceRenderState);
+			int color = ((255) << 24) | ((diceRenderState.red & 255) << 16) | ((diceRenderState.green & 255) << 8) | (diceRenderState.blue & 255);
 			model.renderToBuffer(stack, buffer.getBuffer(rendertype), packedLight, OverlayTexture.NO_OVERLAY, color);
 		}
 		
-		super.render(dice, noidea, partial, stack, buffer, packedLight);
+		super.render(diceRenderState, stack, buffer, packedLight);
 	}
-	
+
 	@Override
-	public ResourceLocation getTextureLocation(DiceEntity dice) {
-		return switch (dice.getDiceType()) {
+	public void extractRenderState(DiceEntity entity, DiceRenderState entityRenderState, float f) {
+		super.extractRenderState(entity, entityRenderState, f);
+		entityRenderState.diceType = entity.getDiceType();
+		entityRenderState.rolled = entity.getRolled();
+
+		entityRenderState.red = entity.getRed();
+		entityRenderState.blue = entity.getBlue();
+		entityRenderState.green = entity.getGreen();
+	}
+
+	public ResourceLocation getTextureLocation(DiceRenderState dice) {
+		return switch (dice.diceType) {
 			case 6 -> D6_TEX;
-			default -> throw new IllegalArgumentException("Unexpected value: " + dice.getDiceType());
+			default -> throw new IllegalArgumentException("Unexpected value: " + dice.diceType);
 		};
 	}
 	
-	private RenderType getRenderType(DiceEntity dice, DiceModel model, boolean flag1, boolean flag2) {
+	private RenderType getRenderType(DiceRenderState dice, DiceModel model, boolean flag1) {
 		ResourceLocation resourcelocation = getTextureLocation(dice);
-		if (flag2) {
-			return RenderType.itemEntityTranslucentCull(resourcelocation);
-		} else if (flag1) {
+		if (flag1) {
 			return model.renderType(resourcelocation);
 		}
 		
-		return minecraft.shouldEntityAppearGlowing(dice) ? RenderType.outline(resourcelocation) : null;
+		return null;
 	}
 }

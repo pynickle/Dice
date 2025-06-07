@@ -7,6 +7,8 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
@@ -32,37 +34,43 @@ public class DiceRegistry {
 	public static final Color GREEN = new Color(86, 150, 49);
 	public static final Color RED = new Color(210, 68, 63);
 	public static final Color BLACK = new Color(82, 82, 82);
-	
+
 	private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Dice.MOD_ID, Registries.CREATIVE_MODE_TAB);
 	private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Dice.MOD_ID, Registries.ENTITY_TYPE);
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Dice.MOD_ID, Registries.ITEM);
 
 	public static void register() {
-		CREATIVE_TABS.register();
+		// CREATIVE_TABS.register();
 		ENTITIES.register();
 		ITEMS.register();
+		CREATIVE_TABS.register();
 	}
 
 	public static final RegistrySupplier<EntityType<DiceEntity>> DICE_ENTITY = ENTITIES.register("dice_entity",
-			() -> EntityType.Builder.<DiceEntity>of(DiceEntity::new, MobCategory.MISC).sized(0.3125f, 0.3125f).build(Dice.MOD_ID + ":dice_entity"));
-	
-	public static final RegistrySupplier<Item> WHITE_D6 = ITEMS.register("white_d6", () -> new DiceItem(WHITE, (byte) 6));
-	public static final RegistrySupplier<Item> ORANGE_D6 = ITEMS.register("orange_d6", () -> new DiceItem(ORANGE, (byte) 6));
-	public static final RegistrySupplier<Item> MAGENTA_D6 = ITEMS.register("magenta_d6", () -> new DiceItem(MAGENTA, (byte) 6));
-	public static final RegistrySupplier<Item> LIGHT_BLUE_D6 = ITEMS.register("light_blue_d6", () -> new DiceItem(LIGHT_BLUE, (byte) 6));
-	public static final RegistrySupplier<Item> YELLOW_D6 = ITEMS.register("yellow_d6", () -> new DiceItem(YELLOW, (byte) 6));
-	public static final RegistrySupplier<Item> LIME_D6 = ITEMS.register("lime_d6", () -> new DiceItem(LIME, (byte) 6));
-	public static final RegistrySupplier<Item> PINK_D6 = ITEMS.register("pink_d6", () -> new DiceItem(PINK, (byte) 6));
-	public static final RegistrySupplier<Item> GRAY_D6 = ITEMS.register("gray_d6", () -> new DiceItem(GRAY, (byte) 6));
-	public static final RegistrySupplier<Item> LIGHT_GRAY_D6 = ITEMS.register("light_gray_d6", () -> new DiceItem(LIGHT_GRAY, (byte) 6));
-	public static final RegistrySupplier<Item> CYAN_D6 = ITEMS.register("cyan_d6", () -> new DiceItem(CYAN, (byte) 6));
-	public static final RegistrySupplier<Item> PURPLE_D6 = ITEMS.register("purple_d6", () -> new DiceItem(PURPLE, (byte) 6));
-	public static final RegistrySupplier<Item> BLUE_D6 = ITEMS.register("blue_d6", () -> new DiceItem(BLUE, (byte) 6));
-	public static final RegistrySupplier<Item> BROWN_D6 = ITEMS.register("brown_d6", () -> new DiceItem(BROWN, (byte) 6));
-	public static final RegistrySupplier<Item> GREEN_D6 = ITEMS.register("green_d6", () -> new DiceItem(GREEN, (byte) 6));
-	public static final RegistrySupplier<Item> RED_D6 = ITEMS.register("red_d6", () -> new DiceItem(RED, (byte) 6));
-	public static final RegistrySupplier<Item> BLACK_D6 = ITEMS.register("black_d6", () -> new DiceItem(BLACK, (byte) 6));
-	
+			() -> EntityType.Builder.<DiceEntity>of(DiceEntity::new, MobCategory.MISC).sized(0.3125f, 0.3125f)
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, "dice_entity"))));
+
+	public static final RegistrySupplier<Item> WHITE_D6 = registerItem("white_d6", WHITE, 6);
+	public static final RegistrySupplier<Item> ORANGE_D6 = registerItem("orange_d6", ORANGE, 6);
+	public static final RegistrySupplier<Item> MAGENTA_D6 = registerItem("magenta_d6", MAGENTA, 6);
+	public static final RegistrySupplier<Item> LIGHT_BLUE_D6 = registerItem("light_blue_d6", LIGHT_BLUE, 6);
+	public static final RegistrySupplier<Item> YELLOW_D6 = registerItem("yellow_d6", YELLOW, 6);
+	public static final RegistrySupplier<Item> LIME_D6 = registerItem("lime_d6", LIME, 6);
+	public static final RegistrySupplier<Item> PINK_D6 = registerItem("pink_d6", PINK, 6);
+	public static final RegistrySupplier<Item> GRAY_D6 = registerItem("gray_d6", GRAY, 6);
+	public static final RegistrySupplier<Item> LIGHT_GRAY_D6 = registerItem("light_gray_d6", LIGHT_GRAY, 6);
+	public static final RegistrySupplier<Item> CYAN_D6 = registerItem("cyan_d6", CYAN, 6);
+	public static final RegistrySupplier<Item> PURPLE_D6 = registerItem("purple_d6", PURPLE, 6);
+	public static final RegistrySupplier<Item> BLUE_D6 = registerItem("blue_d6", BLUE, 6);
+	public static final RegistrySupplier<Item> BROWN_D6 = registerItem("brown_d6", BROWN, 6);
+	public static final RegistrySupplier<Item> GREEN_D6 = registerItem("green_d6", GREEN, 6);
+	public static final RegistrySupplier<Item> RED_D6 = registerItem("red_d6", RED, 6);
+	public static final RegistrySupplier<Item> BLACK_D6 = registerItem("black_d6", BLACK, 6);
+
+	public static RegistrySupplier<Item> registerItem(String id, Color color, int diceType) {
+		return ITEMS.register(id, () -> new DiceItem(color, (byte) diceType, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, id)))));
+	}
+
 	public static final RegistrySupplier<CreativeModeTab> DICE_TAB = CREATIVE_TABS.register("dice",
 			() -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
 					.title(Component.translatable("item_group." + Dice.MOD_ID + ".dice"))
