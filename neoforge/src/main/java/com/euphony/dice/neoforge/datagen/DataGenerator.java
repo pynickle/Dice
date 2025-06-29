@@ -16,7 +16,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = Dice.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Dice.MOD_ID)
 public class DataGenerator {
     @SubscribeEvent
     public static void generate(GatherDataEvent.Client event) {

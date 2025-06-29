@@ -5,7 +5,6 @@ import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,6 +17,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -155,23 +156,23 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag tag) {
-		tag.putInt("R", r);
-		tag.putInt("G", g);
-		tag.putInt("B", b);
-		tag.putByte("Type", type);
-		tag.putByte("Rolled", rolled);
+	protected void addAdditionalSaveData(ValueOutput valueOutput) {
+		valueOutput.putInt("R", r);
+		valueOutput.putInt("G", g);
+		valueOutput.putInt("B", b);
+		valueOutput.putByte("Type", type);
+		valueOutput.putByte("Rolled", rolled);
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundTag tag) {
+	protected void readAdditionalSaveData(ValueInput valueInput) {
 		Color defaultColor = Color.WHITE;
 
-		r = tag.contains("R") ? tag.getInt("R").get() : defaultColor.getRed();
-		g = tag.contains("G") ? tag.getInt("G").get() : defaultColor.getGreen();
-		b = tag.contains("B") ? tag.getInt("B").get() : defaultColor.getBlue();
-		type = tag.contains("Type") ? tag.getByte("Type").get() : 6;
-		rolled = tag.contains("Rolled") ? tag.getByte("Rolled").get() : (byte) (1 + random.nextInt(this.type));
+		r = valueInput.getInt("R").orElse(defaultColor.getRed());
+		g = valueInput.getInt("G").orElse(defaultColor.getGreen());
+		b = valueInput.getInt("B").orElse(defaultColor.getBlue());
+		type = valueInput.getByteOr("Type", (byte) 6);
+		rolled = valueInput.getByteOr("Rolled", (byte) (1 + random.nextInt(this.type)));
 	}
 
 	@Override
