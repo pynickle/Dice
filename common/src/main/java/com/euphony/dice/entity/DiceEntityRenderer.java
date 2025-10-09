@@ -5,10 +5,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.entity.WitherBossRenderer;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderState> {
 	private static final ResourceLocation D6_TEX = ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, "textures/entity/d6.png");
@@ -23,11 +29,12 @@ public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderSta
 	}
 
 	@Override
-	public DiceRenderState createRenderState() {
+	public @NotNull DiceRenderState createRenderState() {
 		return new DiceRenderState();
 	}
+
 	@Override
-	public void render(DiceRenderState diceRenderState, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+	public void submit(DiceRenderState diceRenderState, PoseStack stack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
 		DiceModel model = switch (diceRenderState.diceType) {
 			case 6 -> d6Model;
 			default -> throw new IllegalArgumentException("Unexpected value: " + diceRenderState.rolled);
@@ -35,14 +42,14 @@ public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderSta
 		
 		boolean flag = !diceRenderState.isInvisible;
 		
-		RenderType rendertype = getRenderType(diceRenderState, model, flag);
-		if (rendertype != null) {
+		RenderType renderType = getRenderType(diceRenderState, model, flag);
+		if (renderType != null) {
 			model.setupRotation(diceRenderState);
 			int color = ((255) << 24) | ((diceRenderState.red & 255) << 16) | ((diceRenderState.green & 255) << 8) | (diceRenderState.blue & 255);
-			model.renderToBuffer(stack, buffer.getBuffer(rendertype), packedLight, OverlayTexture.NO_OVERLAY, color);
+            submitNodeCollector.submitModel(model, diceRenderState, stack, renderType, diceRenderState.lightCoords, OverlayTexture.NO_OVERLAY, color, null, diceRenderState.outlineColor, null);
 		}
 		
-		super.render(diceRenderState, stack, buffer, packedLight);
+		super.submit(diceRenderState, stack, submitNodeCollector, cameraRenderState);
 	}
 
 	@Override

@@ -7,6 +7,8 @@ architectury {
     fabric()
 }
 
+sourceSets.main.resources { srcDir project(':common').file('src/generated/resources').getAbsolutePath() }
+
 configurations {
     common {
         canBeResolved = true

@@ -29,7 +29,7 @@ public class DiceItem extends Item {
 	public @NotNull InteractionResult use(Level world, Player player, InteractionHand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
 		
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			DiceEntity dice = new DiceEntity(world, player.getEyePosition().subtract(0, 0.1f, 0), color, diceType);
 			dice.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), 0, 0.75f, 1);
 			world.addFreshEntity(dice);
@@ -40,6 +40,6 @@ public class DiceItem extends Item {
 				0.4f / (player.getRandom().nextFloat() * 0.4f + 0.8f));
 		player.getCooldowns().addCooldown(itemStack, 10);
 
-		return InteractionResult.SUCCESS; // SNWCreations: We don't have 'canRepair', is it added by Forge?
+		return InteractionResult.SUCCESS;
 	}
 }

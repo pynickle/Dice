@@ -81,7 +81,7 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 		}
 		
 		Level level = level();
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			noPhysics = false;
 		} else {
 			noPhysics = !level().noCollision(this, getBoundingBox().deflate(1e-7));
@@ -110,7 +110,7 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 		
 		hasImpulse |= updateInWaterStateAndDoFluidPushing();
 		
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			double d0 = getDeltaMovement().subtract(vec3).lengthSqr();
 			if (d0 > 0.01) {
 				hasImpulse = true;

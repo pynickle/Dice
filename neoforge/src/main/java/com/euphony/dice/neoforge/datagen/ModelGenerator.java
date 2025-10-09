@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class ModelGenerator extends ModelProvider {
         super(packOutput, Dice.MOD_ID);
     }
 
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    protected void registerModels(@NotNull BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         itemModel(itemModels, DiceRegistry.BLACK_D6.get());
         itemModel(itemModels, DiceRegistry.BLUE_D6.get());
         itemModel(itemModels, DiceRegistry.GREEN_D6.get());
