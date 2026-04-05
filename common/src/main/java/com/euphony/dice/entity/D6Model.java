@@ -32,9 +32,13 @@ public class D6Model extends DiceModel {
 	
 	@Override
 	public void setupRotation(DiceRenderState dice) {
+		applyFaceRotation(dice.rolled);
+	}
+
+	public void applyFaceRotation(int rolled) {
 		final float r1 = (float) Math.PI / 2f;
 		
-		switch (dice.rolled) {
+		switch (rolled) {
 			case 1:
 				setRotationAngle((float) Math.PI, 0, 0);
 				break;
@@ -53,6 +57,8 @@ public class D6Model extends DiceModel {
 			case 6:
 				setRotationAngle(0, 0, 0);
 				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + rolled);
 		}
 	}
 	
