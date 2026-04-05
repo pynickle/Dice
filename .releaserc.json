@@ -51,7 +51,6 @@
         "mod_loaders": "${ loader }",
         "display_name": "[${ name } 26.1] ${ nextRelease.version }",
         "glob": "${ loader }/build/libs/Dice-${ nextRelease.version }.jar",
-        "dependencies": [],
         "strategies": [
           {
             "loader": "fabric",
