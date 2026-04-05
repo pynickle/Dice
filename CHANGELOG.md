@@ -1,3 +1,22 @@
+## [2.0.0](https://github.com/pynickle/Dice/compare/v1.0.0...v2.0.0) (2026-04-05)
+
+### ⚠ BREAKING CHANGES
+
+* port to 26.1
+
+### ✨ Features
+
+* remove architectury api dep ([9885058](https://github.com/pynickle/Dice/commit/9885058c7ca6655104321b13a493b77d7bfe47be))
+
+### 💄 Style Improvements
+
+* improve code ([bb86929](https://github.com/pynickle/Dice/commit/bb86929815945f86b56e4bc5dfea575fecf8e783))
+
+### 🔧 Miscellaneous Changes
+
+* port to 26.1 ([4362a17](https://github.com/pynickle/Dice/commit/4362a17506d4e6287f3d13bf5b650ec12c01dee7))
+* update workflow ([43ac6f8](https://github.com/pynickle/Dice/commit/43ac6f85a5ab003a087dbb2f0d78e9b6bd515f43))
+
 ## 1.0.0 (2026-04-05)
 
 ### ⚠ BREAKING CHANGES
