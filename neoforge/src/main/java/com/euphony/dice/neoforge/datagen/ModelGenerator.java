@@ -5,28 +5,18 @@ import com.euphony.dice.registries.DiceRegistry;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.MultiVariant;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
-import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.client.renderer.item.properties.numeric.UseCycle;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.Optional;
-import java.util.function.Function;
-
-import static net.minecraft.client.data.models.BlockModelGenerators.*;
 
 public class ModelGenerator extends ModelProvider {
     public ModelGenerator(PackOutput packOutput) {
@@ -59,8 +49,8 @@ public class ModelGenerator extends ModelProvider {
     }
 
     public void itemModel(ItemModelGenerators itemModels, Item item, ModelTemplate template) {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        ResourceLocation textureLoc = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
+        Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+        Identifier textureLoc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
         TextureMapping textureMapping = new TextureMapping().put(TextureSlot.LAYER0, textureLoc);
         itemModels.itemModelOutput.accept(item, new BlockModelWrapper.Unbaked(template.create(item, textureMapping, itemModels.modelOutput), Collections.emptyList()));
     }
@@ -70,8 +60,8 @@ public class ModelGenerator extends ModelProvider {
     }
 
     public void itemModel(ItemModelGenerators itemModels, Item item, ModelTemplate template, String loc) {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        ResourceLocation textureLoc = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "item/" + loc);
+        Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+        Identifier textureLoc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + loc);
         TextureMapping textureMapping = new TextureMapping().put(TextureSlot.LAYER0, textureLoc);
         itemModels.itemModelOutput.accept(item, new BlockModelWrapper.Unbaked(template.create(item, textureMapping, itemModels.modelOutput), Collections.emptyList()));
     }
