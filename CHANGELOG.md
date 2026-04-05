@@ -1,3 +1,9 @@
+## [2.0.2](https://github.com/pynickle/Dice/compare/v2.0.1...v2.0.2) (2026-04-05)
+
+### 🐛 Bug Fixes
+
+* trigger ([eb644f2](https://github.com/pynickle/Dice/commit/eb644f2322239b0fc2af90a18ce18dec4f74e2f4))
+
 ## [2.0.1](https://github.com/pynickle/Dice/compare/v2.0.0...v2.0.1) (2026-04-05)
 
 ### 🐛 Bug Fixes
