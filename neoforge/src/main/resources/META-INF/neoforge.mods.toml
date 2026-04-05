@@ -13,6 +13,9 @@ Dice Mod Port
 '''
 #logoFile = ""
 
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
 [[dependencies.dice]]
 modId = "neoforge"
 type = "required"

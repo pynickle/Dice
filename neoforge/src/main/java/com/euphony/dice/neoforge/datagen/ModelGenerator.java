@@ -1,19 +1,17 @@
 package com.euphony.dice.neoforge.datagen;
 
 import com.euphony.dice.Dice;
-import com.euphony.dice.registries.DiceRegistry;
+import com.euphony.dice.registries.DiceConstants;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -24,24 +22,9 @@ public class ModelGenerator extends ModelProvider {
     }
 
     protected void registerModels(@NotNull BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
-        itemModel(itemModels, DiceRegistry.BLACK_D6.get());
-        itemModel(itemModels, DiceRegistry.BLUE_D6.get());
-        itemModel(itemModels, DiceRegistry.GREEN_D6.get());
-        itemModel(itemModels, DiceRegistry.PURPLE_D6.get());
-        itemModel(itemModels, DiceRegistry.RED_D6.get());
-        itemModel(itemModels, DiceRegistry.YELLOW_D6.get());
-
-        itemModel(itemModels, DiceRegistry.ORANGE_D6.get());
-        itemModel(itemModels, DiceRegistry.LIGHT_BLUE_D6.get());
-        itemModel(itemModels, DiceRegistry.LIME_D6.get());
-        itemModel(itemModels, DiceRegistry.MAGENTA_D6.get());
-        itemModel(itemModels, DiceRegistry.PINK_D6.get());
-
-        itemModel(itemModels, DiceRegistry.GRAY_D6.get());
-        itemModel(itemModels, DiceRegistry.LIGHT_GRAY_D6.get());
-        itemModel(itemModels, DiceRegistry.CYAN_D6.get());
-        itemModel(itemModels, DiceRegistry.BROWN_D6.get());
-        itemModel(itemModels, DiceRegistry.WHITE_D6.get());
+		for (DiceConstants.DiceItemDefinition itemDefinition : DiceConstants.DICE_ITEMS) {
+			itemModel(itemModels, createDatagenItem(itemDefinition.id()));
+		}
     }
 
     public void itemModel(ItemModelGenerators itemModels, Item item) {
@@ -49,20 +32,10 @@ public class ModelGenerator extends ModelProvider {
     }
 
     public void itemModel(ItemModelGenerators itemModels, Item item, ModelTemplate template) {
-        Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
-        Identifier textureLoc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
-        TextureMapping textureMapping = new TextureMapping().put(TextureSlot.LAYER0, textureLoc);
-        itemModels.itemModelOutput.accept(item, new BlockModelWrapper.Unbaked(template.create(item, textureMapping, itemModels.modelOutput), Collections.emptyList()));
+        itemModels.generateFlatItem(item, template);
     }
 
-    public void itemModel(ItemModelGenerators itemModels, Item item, String loc) {
-        this.itemModel(itemModels, item, ModelTemplates.FLAT_ITEM, loc);
-    }
-
-    public void itemModel(ItemModelGenerators itemModels, Item item, ModelTemplate template, String loc) {
-        Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
-        Identifier textureLoc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + loc);
-        TextureMapping textureMapping = new TextureMapping().put(TextureSlot.LAYER0, textureLoc);
-        itemModels.itemModelOutput.accept(item, new BlockModelWrapper.Unbaked(template.create(item, textureMapping, itemModels.modelOutput), Collections.emptyList()));
-    }
+	private Item createDatagenItem(String id) {
+		return new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Dice.MOD_ID, id))));
+	}
 }

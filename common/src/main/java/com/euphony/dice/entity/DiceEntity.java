@@ -1,13 +1,12 @@
 package com.euphony.dice.entity;
 
-import com.euphony.dice.registries.DiceRegistry;
-import dev.architectury.extensions.network.EntitySpawnExtension;
-import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -24,9 +23,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class DiceEntity extends Entity implements EntitySpawnExtension {
-	private int r, g, b;
-	private byte type, rolled;
+public class DiceEntity extends Entity {
+	private static final EntityDataAccessor<Integer> RED = SynchedEntityData.defineId(DiceEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> GREEN = SynchedEntityData.defineId(DiceEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BLUE = SynchedEntityData.defineId(DiceEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Byte> TYPE = SynchedEntityData.defineId(DiceEntity.class, EntityDataSerializers.BYTE);
+	private static final EntityDataAccessor<Byte> ROLLED = SynchedEntityData.defineId(DiceEntity.class, EntityDataSerializers.BYTE);
+
 	private int life;
 	
 	public DiceEntity(EntityType<? extends Entity> type, Level level) {
@@ -35,21 +38,26 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		builder.define(RED, Color.WHITE.getRed());
+		builder.define(GREEN, Color.WHITE.getGreen());
+		builder.define(BLUE, Color.WHITE.getBlue());
+		builder.define(TYPE, (byte) 6);
+		builder.define(ROLLED, (byte) 1);
 	}
 
 	@Override
 	public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
-		return NetworkManager.createAddEntityPacket(this, serverEntity);
+		return new ClientboundAddEntityPacket(this, serverEntity);
 	}
 
-	public DiceEntity(Level world, Vec3 pos, Color color, byte type) {
-		super(DiceRegistry.DICE_ENTITY.get(), world);
+	public DiceEntity(EntityType<? extends DiceEntity> entityType, Level world, Vec3 pos, Color color, byte type) {
+		super(entityType, world);
 		setPos(pos);
-		this.type = type;
-		rolled = (byte) (1 + random.nextInt(type));
-		r = color.getRed();
-		g = color.getGreen();
-		b = color.getBlue();
+		entityData.set(TYPE, type);
+		entityData.set(ROLLED, (byte) (1 + random.nextInt(type)));
+		entityData.set(RED, color.getRed());
+		entityData.set(GREEN, color.getGreen());
+		entityData.set(BLUE, color.getBlue());
 	}
 	
 	@Override
@@ -157,22 +165,22 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 
 	@Override
 	protected void addAdditionalSaveData(ValueOutput valueOutput) {
-		valueOutput.putInt("R", r);
-		valueOutput.putInt("G", g);
-		valueOutput.putInt("B", b);
-		valueOutput.putByte("Type", type);
-		valueOutput.putByte("Rolled", rolled);
+		valueOutput.putInt("R", getRed());
+		valueOutput.putInt("G", getGreen());
+		valueOutput.putInt("B", getBlue());
+		valueOutput.putByte("Type", getDiceType());
+		valueOutput.putByte("Rolled", getRolled());
 	}
 	
 	@Override
 	protected void readAdditionalSaveData(ValueInput valueInput) {
 		Color defaultColor = Color.WHITE;
 
-		r = valueInput.getInt("R").orElse(defaultColor.getRed());
-		g = valueInput.getInt("G").orElse(defaultColor.getGreen());
-		b = valueInput.getInt("B").orElse(defaultColor.getBlue());
-		type = valueInput.getByteOr("Type", (byte) 6);
-		rolled = valueInput.getByteOr("Rolled", (byte) (1 + random.nextInt(this.type)));
+		entityData.set(RED, valueInput.getInt("R").orElse(defaultColor.getRed()));
+		entityData.set(GREEN, valueInput.getInt("G").orElse(defaultColor.getGreen()));
+		entityData.set(BLUE, valueInput.getInt("B").orElse(defaultColor.getBlue()));
+		entityData.set(TYPE, valueInput.getByteOr("Type", (byte) 6));
+		entityData.set(ROLLED, valueInput.getByteOr("Rolled", (byte) (1 + random.nextInt(getDiceType()))));
 	}
 
 	@Override
@@ -181,40 +189,22 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 	}
 	
 	public int getRed() {
-		return r;
+		return entityData.get(RED);
 	}
 	
 	public int getGreen() {
-		return g;
+		return entityData.get(GREEN);
 	}
 	
 	public int getBlue() {
-		return b;
+		return entityData.get(BLUE);
 	}
 	
 	public byte getDiceType() {
-		return type;
+		return entityData.get(TYPE);
 	}
 	
 	public byte getRolled() {
-		return rolled;
-	}
-
-	@Override
-	public void saveAdditionalSpawnData(FriendlyByteBuf buffer) {
-		buffer.writeInt(r);
-		buffer.writeInt(g);
-		buffer.writeInt(b);
-		buffer.writeByte(type);
-		buffer.writeByte(rolled);
-	}
-
-	@Override
-	public void loadAdditionalSpawnData(FriendlyByteBuf additionalData) {
-		r = additionalData.readInt();
-		g = additionalData.readInt();
-		b = additionalData.readInt();
-		type = additionalData.readByte();
-		rolled = additionalData.readByte();
+		return entityData.get(ROLLED);
 	}
 }

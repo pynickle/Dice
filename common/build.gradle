@@ -16,6 +16,10 @@ architectury {
     common("fabric", "neoforge")
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+}
+
 jar {
     archiveClassifier = "raw"
 }

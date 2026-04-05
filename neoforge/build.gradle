@@ -43,7 +43,7 @@ dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
     common(project(path: ":common")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "runtimeElements")) { transitive false }
 }
 
 processResources {

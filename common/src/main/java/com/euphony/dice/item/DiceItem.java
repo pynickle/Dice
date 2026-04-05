@@ -1,12 +1,12 @@
 package com.euphony.dice.item;
 
 import com.euphony.dice.entity.DiceEntity;
-import com.euphony.dice.registries.DiceRegistry;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,15 +14,18 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.function.Supplier;
 
 public class DiceItem extends Item {
 	private final Color color;
 	private final byte diceType;
+	private final Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier;
 	
-	public DiceItem(Color color, byte diceType, Properties properties) {
-		super(properties.stacksTo(1).arch$tab(DiceRegistry.DICE_TAB));
+	public DiceItem(Color color, byte diceType, Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier, Properties properties) {
+		super(properties.stacksTo(1));
 		this.color = color;
 		this.diceType = diceType;
+		this.entityTypeSupplier = entityTypeSupplier;
 	}
 	
 	@Override
@@ -30,7 +33,7 @@ public class DiceItem extends Item {
 		ItemStack itemStack = player.getItemInHand(hand);
 		
 		if (!world.isClientSide()) {
-			DiceEntity dice = new DiceEntity(world, player.getEyePosition().subtract(0, 0.1f, 0), color, diceType);
+			DiceEntity dice = new DiceEntity(entityTypeSupplier.get(), world, player.getEyePosition().subtract(0, 0.1f, 0), color, diceType);
 			dice.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), 0, 0.75f, 1);
 			world.addFreshEntity(dice);
 		}
