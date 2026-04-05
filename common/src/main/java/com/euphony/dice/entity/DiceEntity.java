@@ -108,12 +108,12 @@ public class DiceEntity extends Entity implements EntitySpawnExtension {
 			}
 		}
 		
-		hasImpulse |= updateInWaterStateAndDoFluidPushing();
+		// hasImpulse |= updateInWaterStateAndDoFluidPushing();
 		
 		if (!level.isClientSide()) {
 			double d0 = getDeltaMovement().subtract(vec3).lengthSqr();
 			if (d0 > 0.01) {
-				hasImpulse = true;
+				// hasImpulse = true;
 			}
 		}
 	}

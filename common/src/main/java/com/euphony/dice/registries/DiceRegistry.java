@@ -8,7 +8,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
@@ -48,7 +48,7 @@ public class DiceRegistry {
 
 	public static final RegistrySupplier<EntityType<DiceEntity>> DICE_ENTITY = ENTITIES.register("dice_entity",
 			() -> EntityType.Builder.<DiceEntity>of(DiceEntity::new, MobCategory.MISC).sized(0.3125f, 0.3125f)
-					.build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, "dice_entity"))));
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(Dice.MOD_ID, "dice_entity"))));
 
 	public static final RegistrySupplier<Item> WHITE_D6 = registerItem("white_d6", WHITE, 6);
 	public static final RegistrySupplier<Item> ORANGE_D6 = registerItem("orange_d6", ORANGE, 6);
@@ -68,7 +68,7 @@ public class DiceRegistry {
 	public static final RegistrySupplier<Item> BLACK_D6 = registerItem("black_d6", BLACK, 6);
 
 	public static RegistrySupplier<Item> registerItem(String id, Color color, int diceType) {
-		return ITEMS.register(id, () -> new DiceItem(color, (byte) diceType, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, id)))));
+		return ITEMS.register(id, () -> new DiceItem(color, (byte) diceType, new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Dice.MOD_ID, id)))));
 	}
 
 	public static final RegistrySupplier<CreativeModeTab> DICE_TAB = CREATIVE_TABS.register("dice",

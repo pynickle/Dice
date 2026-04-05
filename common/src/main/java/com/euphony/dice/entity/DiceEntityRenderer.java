@@ -3,21 +3,17 @@ package com.euphony.dice.entity;
 import com.euphony.dice.Dice;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.WitherBossRenderer;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderState> {
-	private static final ResourceLocation D6_TEX = ResourceLocation.fromNamespaceAndPath(Dice.MOD_ID, "textures/entity/d6.png");
+	private static final Identifier D6_TEX = Identifier.fromNamespaceAndPath(Dice.MOD_ID, "textures/entity/d6.png");
 	private static D6Model d6Model;
 	
 	private final Minecraft minecraft;
@@ -63,7 +59,7 @@ public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderSta
 		entityRenderState.green = entity.getGreen();
 	}
 
-	public ResourceLocation getTextureLocation(DiceRenderState dice) {
+	public Identifier getTextureLocation(DiceRenderState dice) {
 		return switch (dice.diceType) {
 			case 6 -> D6_TEX;
 			default -> throw new IllegalArgumentException("Unexpected value: " + dice.diceType);
@@ -71,7 +67,7 @@ public class DiceEntityRenderer extends EntityRenderer<DiceEntity, DiceRenderSta
 	}
 	
 	private RenderType getRenderType(DiceRenderState dice, DiceModel model, boolean flag1) {
-		ResourceLocation resourcelocation = getTextureLocation(dice);
+		Identifier resourcelocation = getTextureLocation(dice);
 		if (flag1) {
 			return model.renderType(resourcelocation);
 		}
