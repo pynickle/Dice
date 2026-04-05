@@ -16,22 +16,15 @@ Dice Mod Port
 [[dependencies.dice]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dice]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.5,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.dice]]
-modId = "architectury"
-type = "required"
-versionRange = "[16.1,)"
-ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
