@@ -9,7 +9,7 @@ import net.neoforged.fml.common.Mod;
 @EventBusSubscriber(modid = Dice.MOD_ID)
 public final class DiceNeoForge {
     public DiceNeoForge(IEventBus modBus) {
-		DiceNeoForgeRegistries.ITEMS.register(modBus);
+        DiceNeoForgeRegistries.ITEMS.register(modBus);
         DiceNeoForgeRegistries.ENTITY_TYPES.register(modBus);
         DiceNeoForgeRegistries.CREATIVE_MODE_TABS.register(modBus);
 

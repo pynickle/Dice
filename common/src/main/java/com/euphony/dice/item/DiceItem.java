@@ -17,32 +17,32 @@ import java.awt.*;
 import java.util.function.Supplier;
 
 public class DiceItem extends Item {
-	private final Color color;
-	private final byte diceType;
-	private final Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier;
-	
-	public DiceItem(Color color, byte diceType, Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier, Properties properties) {
-		super(properties.stacksTo(1));
-		this.color = color;
-		this.diceType = diceType;
-		this.entityTypeSupplier = entityTypeSupplier;
-	}
-	
-	@Override
-	public @NotNull InteractionResult use(Level world, Player player, InteractionHand hand) {
-		ItemStack itemStack = player.getItemInHand(hand);
-		
-		if (!world.isClientSide()) {
-			DiceEntity dice = new DiceEntity(entityTypeSupplier.get(), world, player.getEyePosition().subtract(0, 0.1f, 0), color, diceType);
-			dice.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), 0, 0.75f, 1);
-			world.addFreshEntity(dice);
-		}
-		
-		player.awardStat(Stats.ITEM_USED.get(this));
-		world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WITCH_THROW, SoundSource.NEUTRAL, 0.4f,
-				0.4f / (player.getRandom().nextFloat() * 0.4f + 0.8f));
-		player.getCooldowns().addCooldown(itemStack, 10);
+    private final Color color;
+    private final byte diceType;
+    private final Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier;
 
-		return InteractionResult.SUCCESS;
-	}
+    public DiceItem(Color color, byte diceType, Supplier<? extends EntityType<DiceEntity>> entityTypeSupplier, Properties properties) {
+        super(properties.stacksTo(1));
+        this.color = color;
+        this.diceType = diceType;
+        this.entityTypeSupplier = entityTypeSupplier;
+    }
+
+    @Override
+    public @NotNull InteractionResult use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+
+        if (!world.isClientSide()) {
+            DiceEntity dice = new DiceEntity(entityTypeSupplier.get(), world, player.getEyePosition().subtract(0, 0.1f, 0), color, diceType);
+            dice.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), 0, 0.75f, 1);
+            world.addFreshEntity(dice);
+        }
+
+        player.awardStat(Stats.ITEM_USED.get(this));
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.WITCH_THROW, SoundSource.NEUTRAL, 0.4f,
+                0.4f / (player.getRandom().nextFloat() * 0.4f + 0.8f));
+        player.getCooldowns().addCooldown(itemStack, 10);
+
+        return InteractionResult.SUCCESS;
+    }
 }

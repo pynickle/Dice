@@ -10,16 +10,16 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 @EventBusSubscriber(modid = Dice.MOD_ID, value = Dist.CLIENT)
 public final class DiceNeoForgeClient {
-	private DiceNeoForgeClient() {
-	}
+    private DiceNeoForgeClient() {
+    }
 
-	@SubscribeEvent
-	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(DiceNeoForgeRegistries.DICE_ENTITY.get(), DiceEntityRenderer::new);
-	}
+    @SubscribeEvent
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(DiceNeoForgeRegistries.DICE_ENTITY.get(), DiceEntityRenderer::new);
+    }
 
-	@SubscribeEvent
-	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(D6Model.LAYER_LOCATION, D6Model::createBodyLayer);
-	}
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(D6Model.LAYER_LOCATION, D6Model::createBodyLayer);
+    }
 }

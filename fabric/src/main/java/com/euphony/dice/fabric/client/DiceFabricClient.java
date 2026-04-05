@@ -9,10 +9,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 
 public final class DiceFabricClient implements ClientModInitializer {
-	@Override
-	public void onInitializeClient() {
-		EntityRenderers.register(DiceFabricRegistry.DICE_ENTITY, DiceEntityRenderer::new);
-		ModelLayerRegistry.registerModelLayer(D6Model.LAYER_LOCATION, D6Model::createBodyLayer);
-		DiceClient.init();
-	}
+    @Override
+    public void onInitializeClient() {
+        EntityRenderers.register(DiceFabricRegistry.DICE_ENTITY, DiceEntityRenderer::new);
+        ModelLayerRegistry.registerModelLayer(D6Model.LAYER_LOCATION, D6Model::createBodyLayer);
+        DiceClient.init();
+    }
 }

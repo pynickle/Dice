@@ -10,9 +10,9 @@ public final class DiceFabric implements ModInitializer {
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
 
-		DiceFabricRegistry.register();
+        DiceFabricRegistry.register();
 
-		// Run our common setup.
-		Dice.init();
+        // Run our common setup.
+        Dice.init();
     }
 }
